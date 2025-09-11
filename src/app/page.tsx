@@ -8,19 +8,22 @@ import { motion } from "framer-motion";
 import { Edit, Palette, Download, Users, Star, Zap } from "lucide-react";
 
 export default function Home() {
-  // List of videos from your /public/assets folder
-  const videos = ["/assets/job1.mp4", "/assets/job2.mp4", "/assets/job3.mp4", "/assets/job4.mp4"];
+  const videos = [
+    "/assets/job1.mp4",
+    "/assets/job2.mp4",
+    "/assets/job3.mp4",
+    "/assets/job4.mp4",
+  ];
 
-  // Track which video is currently playing
   const [currentVideo, setCurrentVideo] = useState(0);
 
   // Switch video every 5 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentVideo((prev) => (prev + 1) % videos.length);
-    }, 5000); // 5000ms = 5 seconds
+    }, 5000);
 
-    return () => clearInterval(interval); // cleanup on unmount
+    return () => clearInterval(interval);
   }, [videos.length]);
 
   return (
@@ -59,7 +62,8 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            Build a <span className="text-blue-400">Professional Resume</span> in Minutes
+            Build a <span className="text-blue-400">Professional Resume</span>{" "}
+            in Minutes
           </motion.h1>
           <motion.p
             className="mt-6 text-lg md:text-xl text-gray-200 max-w-2xl mx-auto"
@@ -68,11 +72,12 @@ export default function Home() {
             transition={{ duration: 0.8, delay: 0.4 }}
           >
             Create, customize, and export stunning resumes effortlessly. Save
-            multiple versions, pick from templates, and land your dream job faster.
+            multiple versions, pick from templates, and land your dream job
+            faster.
           </motion.p>
 
           <motion.div
-            className="mt-8 flex gap-4 justify-center"
+            className="mt-8 flex flex-col sm:flex-row gap-4 justify-center items-center"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
@@ -95,21 +100,28 @@ export default function Home() {
 
       {/* Features Section */}
       <section className="py-16 bg-white">
-        <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-10 text-center">
+        <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 text-center">
           <div className="p-6 rounded-2xl shadow hover:shadow-lg transition bg-blue-50">
-            <h3 className="text-xl font-semibold text-gray-800">Easy Editing</h3>
+            <h3 className="text-xl font-semibold text-gray-800">
+              Easy Editing
+            </h3>
             <p className="mt-2 text-gray-600">
               A simple editor to create and update resumes without any hassle.
             </p>
           </div>
           <div className="p-6 rounded-2xl shadow hover:shadow-lg transition bg-blue-50">
-            <h3 className="text-xl font-semibold text-gray-800">Modern Templates</h3>
+            <h3 className="text-xl font-semibold text-gray-800">
+              Modern Templates
+            </h3>
             <p className="mt-2 text-gray-600">
-              Choose from professionally designed resume templates that stand out.
+              Choose from professionally designed resume templates that stand
+              out.
             </p>
           </div>
           <div className="p-6 rounded-2xl shadow hover:shadow-lg transition bg-blue-50">
-            <h3 className="text-xl font-semibold text-gray-800">Export & Share</h3>
+            <h3 className="text-xl font-semibold text-gray-800">
+              Export & Share
+            </h3>
             <p className="mt-2 text-gray-600">
               Download your resume as PDF or share it online instantly.
             </p>
@@ -122,4 +134,3 @@ export default function Home() {
     </div>
   );
 }
-
