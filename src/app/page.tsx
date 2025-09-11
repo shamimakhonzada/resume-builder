@@ -1,103 +1,125 @@
-import Image from "next/image";
+"use client";
+
+import { useState, useEffect } from "react";
+import Footer from "@/components/Footer";
+import Navbar from "@/components/Navbar";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { Edit, Palette, Download, Users, Star, Zap } from "lucide-react";
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  // List of videos from your /public/assets folder
+  const videos = ["/assets/job1.mp4", "/assets/job2.mp4", "/assets/job3.mp4", "/assets/job4.mp4"];
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  // Track which video is currently playing
+  const [currentVideo, setCurrentVideo] = useState(0);
+
+  // Switch video every 5 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentVideo((prev) => (prev + 1) % videos.length);
+    }, 5000); // 5000ms = 5 seconds
+
+    return () => clearInterval(interval); // cleanup on unmount
+  }, [videos.length]);
+
+  return (
+    <div className="flex flex-col min-h-screen">
+      {/* Hero Section with Background Video */}
+      <section className="relative w-full h-screen flex items-center justify-center text-center">
+        {/* Background Video */}
+        <video
+          key={currentVideo} // re-render when video changes
+          className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
+          autoPlay
+          muted
+          playsInline
+        >
+          <source src={videos[currentVideo]} type="video/mp4" />
+        </video>
+
+        {/* Blue Overlay */}
+        <div className="absolute inset-0 bg-blue-900/40"></div>
+
+        {/* Navbar on top */}
+        <div className="absolute top-0 left-0 w-full">
+          <Navbar />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+
+        {/* Hero Content */}
+        <motion.div
+          className="relative z-10 px-6 text-white max-w-3xl"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          <motion.h1
+            className="text-5xl md:text-6xl font-extrabold leading-tight"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            Build a <span className="text-blue-400">Professional Resume</span> in Minutes
+          </motion.h1>
+          <motion.p
+            className="mt-6 text-lg md:text-xl text-gray-200 max-w-2xl mx-auto"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+          >
+            Create, customize, and export stunning resumes effortlessly. Save
+            multiple versions, pick from templates, and land your dream job faster.
+          </motion.p>
+
+          <motion.div
+            className="mt-8 flex gap-4 justify-center"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+          >
+            <Link
+              href="/dashboard"
+              className="px-6 py-3 bg-blue-600 text-white rounded-xl shadow hover:bg-blue-700 transition transform hover:scale-105"
+            >
+              Get Started
+            </Link>
+            <Link
+              href="/templates"
+              className="px-6 py-3 bg-white text-blue-600 border border-blue-600 rounded-xl shadow hover:bg-blue-50 transition transform hover:scale-105"
+            >
+              View Templates
+            </Link>
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-16 bg-white">
+        <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-10 text-center">
+          <div className="p-6 rounded-2xl shadow hover:shadow-lg transition bg-blue-50">
+            <h3 className="text-xl font-semibold text-gray-800">Easy Editing</h3>
+            <p className="mt-2 text-gray-600">
+              A simple editor to create and update resumes without any hassle.
+            </p>
+          </div>
+          <div className="p-6 rounded-2xl shadow hover:shadow-lg transition bg-blue-50">
+            <h3 className="text-xl font-semibold text-gray-800">Modern Templates</h3>
+            <p className="mt-2 text-gray-600">
+              Choose from professionally designed resume templates that stand out.
+            </p>
+          </div>
+          <div className="p-6 rounded-2xl shadow hover:shadow-lg transition bg-blue-50">
+            <h3 className="text-xl font-semibold text-gray-800">Export & Share</h3>
+            <p className="mt-2 text-gray-600">
+              Download your resume as PDF or share it online instantly.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }
+
