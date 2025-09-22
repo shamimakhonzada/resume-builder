@@ -4,8 +4,9 @@ import { useState, useEffect } from "react";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { Edit, Palette, Download, Users, Star, Zap } from "lucide-react";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   const videos = [
@@ -29,87 +30,88 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section with Background Video */}
-      <section className="relative w-full min-h-screen landscape:min-h-[70vh] flex items-center justify-center text-center px-4 sm:px-6 lg:px-8">
+      <section className="relative w-full min-h-screen flex items-center justify-center text-center px-4 sm:px-6 lg:px-8">
         {/* Background Video */}
         <video
-          key={currentVideo} // re-render when video changes
-          className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
+          key={currentVideo}
+          className="absolute inset-0 w-full min-h-screen object-cover transition-opacity duration-700 pointer-events-none"
           autoPlay
           muted
           playsInline
+          aria-hidden="true"
         >
           <source src={videos[currentVideo]} type="video/mp4" />
         </video>
 
-        {/* Blue Overlay */}
+        {/* Overlay */}
         <div className="absolute inset-0 bg-blue-900/40"></div>
 
-        {/* Navbar on top */}
+        {/* Navbar */}
         <div className="absolute top-0 left-0 w-full">
           <Navbar />
         </div>
 
         {/* Hero Content */}
-        <motion.div
-          className="relative z-10 text-white max-w-3xl"
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-        >
-          <motion.h1
-            className="text-4xl sm:text-5xl md:text-6xl landscape:text-7xl font-extrabold leading-tight"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
+        <div className="relative z-30 text-white max-w-3xl px-4">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight">
             Build a <span className="text-blue-400">Professional Resume</span>{" "}
             in Minutes
-          </motion.h1>
-          <motion.p
-            className="mt-6 text-base sm:text-lg md:text-xl landscape:text-2xl text-gray-200 max-w-2xl landscape:max-w-4xl mx-auto"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-          >
+          </h1>
+          <p className="mt-6 text-base sm:text-lg md:text-xl landscape:text-2xl text-gray-200 max-w-2xl landscape:max-w-4xl mx-auto">
             Create, customize, and export stunning resumes effortlessly. Save
             multiple versions, pick from templates, and land your dream job
             faster.
-          </motion.p>
+          </p>
 
-          <motion.div
-            className="mt-8 flex flex-col sm:flex-row gap-4 justify-center"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-          >
-            <Link
-              href="/dashboard"
-              className="w-full sm:w-auto px-6 py-3 bg-blue-600 text-white rounded-xl shadow-lg hover:bg-blue-700 transition-transform transform hover:scale-105"
-            >
-              Get Started
-            </Link>
-            <Link
-              href="/templates"
-              className="w-full sm:w-auto px-6 py-3 bg-white text-blue-600 border border-blue-600 rounded-xl shadow-lg hover:bg-blue-50 transition-transform transform hover:scale-105"
-            >
-              View Templates
-            </Link>
-          </motion.div>
-        </motion.div>
+          <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+            <SignedOut>
+              <Link href="/signin">
+                <Button
+                  className="text-[16px] px-5 py-2.5 transition-all "
+                  size={"lg"}
+                >
+                  Get Started
+                </Button>
+              </Link>
+              <Link href="/signin">
+                <Button
+                  className="text-[16px] px-5 py-2.5 transition-all "
+                  variant={"secondary"}
+                  size={"lg"}
+                >
+                  View Templates
+                </Button>
+              </Link>
+            </SignedOut>
+            <SignedIn>
+              <Link href="/dashboard">
+                <Button className="text-[16px] px-5 py-2.5 transition-all ">
+                  Get Started
+                </Button>
+              </Link>
+              <Link href="/template">
+                <Button
+                  className="text-[16px] px-5 py-2.5 transition-all "
+                  variant="secondary"
+                >
+                  View Templates
+                </Button>
+              </Link>
+            </SignedIn>
+          </div>
+        </div>
       </section>
 
       {/* Features Section */}
-      <section className="py-16 sm:py-20 landscape:py-24 bg-white">
+      <section className="py-16 bg-white relative z-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900">
-              Features
-            </h2>
-            <p className="mt-4 text-base sm:text-lg text-gray-600">
+            <h2 className="text-3xl font-extrabold text-gray-900">Features</h2>
+            <p className="mt-4 text-base text-gray-600">
               Everything you need to create the perfect resume.
             </p>
           </div>
-          <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3 landscape:grid-cols-4">
+          <div className="mt-12 grid gap-8 grid-cols-1 md:grid-cols-3">
             <div className="p-6 bg-gray-50 rounded-2xl shadow-lg text-center">
               <Edit className="mx-auto h-12 w-12 text-blue-600" />
               <h3 className="mt-6 text-xl font-semibold text-gray-800">
@@ -142,17 +144,17 @@ export default function Home() {
         </div>
       </section>
 
-      {/* New Section */}
-      <section className="py-16 sm:py-20 landscape:py-24 bg-blue-50">
+      {/* Why Choose Us Section */}
+      <section className="py-16 bg-blue-50 relative z-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900">
+          <h2 className="text-3xl font-extrabold text-gray-900">
             Why Choose Us?
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-gray-600">
+          <p className="mt-4 text-base text-gray-600">
             Our platform is designed to provide the best resume-building
             experience.
           </p>
-          <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3 landscape:grid-cols-4">
+          <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             <div className="p-6">
               <Users className="mx-auto h-12 w-12 text-blue-600" />
               <h3 className="mt-6 text-xl font-semibold text-gray-800">
